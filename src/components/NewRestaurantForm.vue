@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { v4 as uuidv4 } from 'uuid'
 
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 
 import { restaurantStatusList } from '@/constants'
 import type { Restaurant } from '@/types'
+
+const elNameInput = ref<HTMLInputElement | null>(null)
 
 // emits: ['add-new-restaurant', 'cancel-new-restaurant'],
 
@@ -21,12 +23,39 @@ const newRestaurant = ref<Restaurant>({
 })
 // restaurantStatusList
 
+// input event
+// KeyboardEvent
+
+const updateName = (e: KeyboardEvent) => {
+  // hijacking event.
+  newRestaurant.value.name = (e.target as HTMLInputElement).value
+}
+
+// const updateName = (event: InputEvent) => {
+//   if (event.data == ' ') {
+//     // console.log((event.target as HTMLInputElement).value);
+//     if (event.target) {
+
+//       console.log((event.target as HTMLInputElement).value);
+//     }
+
+
+//   }
+// }
+
 const addRestaurant = () => {
   emits('add-new-restaurant', newRestaurant.value)
 }
 const cancelRestaurant = () => {
   emits('cancel-new-restaurant')
 }
+
+onMounted(() => {
+  // if(elNameInput.value) {
+  //   elNameInput.value.focus()
+  // }
+  elNameInput.value?.focus()
+})
 
 
 </script>

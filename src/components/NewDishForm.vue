@@ -1,18 +1,39 @@
-<script>
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { defineComponent, onMounted, ref } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 
-export default defineComponent({
-  emits: ['add-new-dish', 'cancel-new-dish'],
-  data: () => ({
-    newDish: {
-      id: uuidv4(),
-      name: '',
-      status: 'Want to Try',
-      diet: '',
-    },
-  }),
+import type { Dish } from '@/types'
+
+const emits = defineEmits<{
+  (e: 'add-new-dish', dis: Dish): void,
+  (e: 'cancel-new-dish'): void
+}>()
+
+const newDish = ref<Dish>({
+  id: uuidv4(),
+  name: '',
+  status: 'Want to Try',
+  diet: '',
 })
+const elNameInput = ref<HTMLInputElement | null>(null)
+
+
+
+onMounted(() => {
+  elNameInput.value?.focus();
+})
+
+// export default defineComponent({
+//   emits: ['add-new-dish', 'cancel-new-dish'],
+//   data: () => ({
+//     newDish: {
+//       id: uuidv4(),
+//       name: '',
+//       status: 'Want to Try',
+//       diet: '',
+//     },
+//   }),
+// })
 </script>
 
 <template>
@@ -21,14 +42,8 @@ export default defineComponent({
       <div class="field">
         <label for="name" class="label">Name</label>
         <div class="control">
-          <input
-            v-model="newDish.name"
-            type="text"
-            class="input is-large"
-            placeholder="Mystery Flavored Shrimp"
-            required
-            ref="elNameInput"
-          />
+          <input v-model="newDish.name" type="text" class="input is-large" placeholder="Mystery Flavored Shrimp" required
+            ref="elNameInput" />
         </div>
       </div>
       <div class="field">
